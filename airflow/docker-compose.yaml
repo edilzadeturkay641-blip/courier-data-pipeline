@@ -1,0 +1,13 @@
+services:
+  airflow:
+    image: apache/airflow:2.8.4
+    container_name: courier_airflow
+    ports:
+      - "8080:8080"
+    volumes:
+      - ../dags:/opt/airflow/dags
+      - ../data:/opt/airflow/data
+      - ../db.py:/opt/airflow/db.py
+    environment:
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    command: standalone

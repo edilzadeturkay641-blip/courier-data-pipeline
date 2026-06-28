@@ -1,0 +1,25 @@
+# Virtual environment
+venv/
+
+# Environment variables
+.env
+
+# VS Code
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+
+# Logs
+logs/
+
+# Airflow
+airflow/airflow.db
+airflow/logs/
+
+# Processed data
+data/processed/
+
+# SQLite
+*.db

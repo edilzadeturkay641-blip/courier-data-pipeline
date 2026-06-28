@@ -1,0 +1,42 @@
+[
+    {
+        "company_id": 1,
+        "company_name": "Bravo",
+        "city": "Baku"
+    },
+    {
+        "company_id": 2,
+        "company_name": "Araz",
+        "city": "Sumgait"
+    },
+    {
+        "company_id": 3,
+        "company_name": "Kontakt Home",
+        "city": "Shaki"
+    },
+    {
+        "company_id": 4,
+        "company_name": "Irshad",
+        "city": "Baku"
+    },
+    {
+        "company_id": 5,
+        "company_name": "Wolt",
+        "city": "Sumgait"
+    },
+    {
+        "company_id": 6,
+        "company_name": "Bolt Food",
+        "city": "Baku"
+    },
+    {
+        "company_id": 7,
+        "company_name": "Starex",
+        "city": "Sumgait"
+    },
+    {
+        "company_id": 8,
+        "company_name": "Limak",
+        "city": "Ganja"
+    }
+]
