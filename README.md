@@ -38,23 +38,13 @@ Streamlit Dashboard
 
 ### Orders by City
 
-![Orders by City](images/city.png)
+![Orders by City](images/Courier.png)
 
 ### Revenue by Company
 
-![Revenue by Company](images/company.png)
+![Revenue by Company](images/weather.png)
 
-### Delivery Status
 
-![Delivery Status](images/deliverey.png)
-
-### Monthly Orders Trend
-
-![Monthly Orders Trend](images/monthly.png)
-
-### Weather Impact Analysis
-
-![Weather Impact](images/weather.png)
 
 ---
 

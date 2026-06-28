@@ -11,6 +11,19 @@ st.set_page_config(
     layout="wide"
 )
 
+st.markdown(
+    """
+    <h1 style="
+        text-align:center;
+        font-size:48px;
+        font-weight:bold;
+        margin-bottom:30px;
+    ">
+        Courier Company Dashboard
+    </h1>
+    """,
+    unsafe_allow_html=True
+)
 DATA_DIR = Path("data/processed")
 
 orders_by_city_file = DATA_DIR / "orders_by_city.csv"
@@ -23,221 +36,236 @@ if not orders_by_city_file.exists() or not total_orders_file.exists():
 orders_by_city = pd.read_csv(orders_by_city_file)
 total_orders = pd.read_csv(total_orders_file)["total_orders"][0]
 
-st.title("Courier Company Dashboard")
+#st.title("Courier Company Dashboard")
 
-st.metric(
-    label="Total Orders",
-    value=f"{total_orders:,}"
-)
-
-st.divider()
-
-fig = px.bar(
-    orders_by_city,
-    x="total_orders",
-    y="city",
-    orientation="h",
-    text="total_orders",
-    color="total_orders",
-    color_continuous_scale="Blues"
-)
-
-fig.update_traces(
-    textposition="outside"
-)
-
-fig.update_layout(
-    title="Orders by City",
-    xaxis_title="Total Orders",
-    yaxis_title="",
-    coloraxis_showscale=False,
-    plot_bgcolor="white",
-    paper_bgcolor="white",
-    height=550,
-    font=dict(size=14),
-    yaxis=dict(
-        autorange="reversed"
-    )
-)
-
-st.plotly_chart(
-    fig,
-    use_container_width=True
-)
-
-
-
-
-# ================= REVENUE BY COMPANY =================
-
-revenue_by_company_file = DATA_DIR / "revenue_by_company.csv"
-
-if not revenue_by_company_file.exists():
-    st.warning("Əvvəl Airflow-da revenue_by_company task-ını işə sal.")
-    st.stop()
-
-revenue_by_company = pd.read_csv(revenue_by_company_file)
-
-total_revenue = revenue_by_company["total_revenue"].sum()
-
-st.subheader("Revenue by Company")
-
-st.metric(
-    label="Total Revenue",
-    value=f"{total_revenue:,.2f} AZN"
-)
-
-fig2 = px.pie(
-    revenue_by_company,
-    names="company_name",
-    values="total_revenue",
-    hole=0.60,
-    color="company_name",
-    color_discrete_sequence=px.colors.sequential.Blues_r
-)
-
-fig2.update_traces(
-    textinfo="label+percent",
-    textposition="inside",
-    insidetextorientation="horizontal",
-    hovertemplate=
-    "<b>%{label}</b><br>"
-    "Revenue: %{value:,.2f} AZN<br>"
-    "Share: %{percent}<extra></extra>"
-)
-
-fig2.update_layout(
-    title="Revenue Share by Company",
-    title_x=0.02,
-    height=650,
-    showlegend=True,
-    legend_title="Companies",
-    font=dict(size=14),
-    margin=dict(l=20, r=20, t=60, b=20)
-)
-
-st.plotly_chart(
-    fig2,
-    use_container_width=True
-)
-# ================= DELIVERY STATUS =================
-
-delivery_status_file = DATA_DIR / "delivery_status.csv"
-total_deliveries_file = DATA_DIR / "total_deliveries.csv"
-failed_rate_file = DATA_DIR / "failed_rate.csv"
-
-if (
-    not delivery_status_file.exists()
-    or not total_deliveries_file.exists()
-    or not failed_rate_file.exists()
-):
-    st.warning("Əvvəl Airflow-da delivery_status task-ını işə sal.")
-    st.stop()
-
-delivery_status = pd.read_csv(delivery_status_file)
-total_deliveries = pd.read_csv(total_deliveries_file)["total_deliveries"][0]
-failed_rate = pd.read_csv(failed_rate_file)["failed_rate"][0]
-
-st.subheader("Delivery Status Performance")
-
-col1, col2 = st.columns(2)
+col1, spacer1, col2 = st.columns([1, 0.18, 1])
 
 with col1:
-    st.metric(
-        label="Total Deliveries",
-        value=f"{total_deliveries:,}"
+    st.subheader("Orders by City")
+
+    fig = px.bar(
+        orders_by_city,
+        x="total_orders",
+        y="city",
+        orientation="h",
+        text="total_orders",
+        color="total_orders",
+        color_continuous_scale="Blues"
     )
+
+    fig.update_traces(
+        textposition="outside"
+    )
+
+    fig.update_layout(
+       # title="O",
+        xaxis_title="Total Orders",
+        yaxis_title="",
+        coloraxis_showscale=False,
+        plot_bgcolor="white",
+        paper_bgcolor="white",
+        height=420,
+        font=dict(size=12),
+        margin=dict(l=20, r=20, t=50, b=20),
+        yaxis=dict(
+            autorange="reversed"
+        )
+    )
+
+    st.plotly_chart(
+        fig,
+        use_container_width=True
+    )
+
 
 with col2:
+    # ================= REVENUE BY COMPANY =================
+
+    revenue_by_company_file = DATA_DIR / "revenue_by_company.csv"
+
+    if not revenue_by_company_file.exists():
+        st.warning("Əvvəl Airflow-da revenue_by_company task-ını işə sal.")
+        st.stop()
+
+    revenue_by_company = pd.read_csv(revenue_by_company_file)
+
+    total_revenue = revenue_by_company["total_revenue"].sum()
+
+    st.subheader("Revenue by Company")
+
     st.metric(
-        label="Failed Delivery Rate",
-        value=f"{failed_rate:.2f}%"
+        label="Total Revenue",
+        value=f"{total_revenue:,.2f} AZN"
     )
 
-fig3 = px.funnel(
-    delivery_status,
-    x="total_deliveries",
-    y="delivery_status",
-    title="Delivery Status Funnel",
-    color="delivery_status",
-    color_discrete_sequence=px.colors.sequential.Blues_r
-)
+    fig2 = px.pie(
+        revenue_by_company,
+        names="company_name",
+        values="total_revenue",
+        hole=0.60,
+        color="company_name",
+        color_discrete_sequence=px.colors.sequential.Blues_r
+    )
 
-fig3.update_traces(
-    textinfo="value+percent initial"
-)
+    fig2.update_traces(
+        textinfo="percent",
+        textposition="inside",
+        insidetextorientation="horizontal",
+        hovertemplate=
+        "<b>%{label}</b><br>"
+        "Revenue: %{value:,.2f} AZN<br>"
+        "Share: %{percent}<extra></extra>"
+    )
 
-fig3.update_layout(
-    height=500,
-    plot_bgcolor="white",
-    paper_bgcolor="white",
-    xaxis_title="Total Deliveries",
-    yaxis_title="Delivery Status",
-    showlegend=False,
-    font=dict(size=14),
-    margin=dict(l=20, r=20, t=60, b=20)
-)
-
-st.plotly_chart(
-    fig3,
-    use_container_width=True
-)
-
-
-# ================= MONTHLY ORDERS TREND =================
-
-monthly_orders_file = DATA_DIR / "monthly_orders.csv"
-
-if not monthly_orders_file.exists():
-    st.warning("Əvvəl Airflow-da monthly_orders ETL-ni işə sal.")
-    st.stop()
-
-monthly_orders = pd.read_csv(monthly_orders_file)
-
-st.subheader("Monthly Orders Trend")
-
-fig4 = px.line(
-    monthly_orders,
-    x="month",
-    y="total_orders",
-    text="total_orders",
-    markers=True
-)
-
-fig4.update_traces(
-    mode="lines+markers+text",
-    textposition="top center",
-    line_shape="linear",
-    line=dict(
-        color="#1565C0",
-        width=3
-    ),
-    marker=dict(
-        size=9,
-        color="#1565C0"
-    ),
-    textfont=dict(
-        size=13,
-        color="#1565C0"
+    fig2.update_layout(
+      title="Revenue Share by Company",
+    title_x=0.02,
+    height=360,
+    showlegend=True,
+    legend_title="Companies",
+    font=dict(size=12),
+    margin=dict(l=10, r=10, t=0, b=10),
+    legend=dict(
+        orientation="v",
+        yanchor="middle",
+        y=0.5,
+        xanchor="left",
+        x=1.02
     )
 )
 
-fig4.update_layout(
-    title="Monthly Orders Trend",
-    template="plotly_white",
-    height=500,
-    showlegend=False,
-    xaxis_title="Month",
-    yaxis_title="Total Orders",
-    hovermode="x unified"
+    st.plotly_chart(
+        fig2,
+        use_container_width=True
+    )
+# ================= DELIVERY STATUS + MONTHLY ORDERS =================
+
+col3, spacer2, col4 = st.columns([1, 0.18, 1])
+
+with col3:
+    delivery_status_file = DATA_DIR / "delivery_status.csv"
+    total_deliveries_file = DATA_DIR / "total_deliveries.csv"
+    failed_rate_file = DATA_DIR / "failed_rate.csv"
+
+    if (
+        not delivery_status_file.exists()
+        or not total_deliveries_file.exists()
+        or not failed_rate_file.exists()
+    ):
+        st.warning("Əvvəl Airflow-da delivery_status task-ını işə sal.")
+        st.stop()
+
+    delivery_status = pd.read_csv(delivery_status_file)
+    total_deliveries = pd.read_csv(total_deliveries_file)["total_deliveries"][0]
+    failed_rate = pd.read_csv(failed_rate_file)["failed_rate"][0]
+
+    st.subheader("Delivery Status Performance")
+
+    metric1, metric2 = st.columns(2)
+
+    with metric1:
+        st.metric(
+            label="Total Deliveries",
+            value=f"{total_deliveries:,}"
+        )
+
+    with metric2:
+        st.metric(
+            label="Failed Delivery Rate",
+            value=f"{failed_rate:.2f}%"
+        )
+
+    fig3 = px.bar(
+        delivery_status,
+        x="total_deliveries",
+        y="delivery_status",
+        orientation="h",
+        text="total_deliveries",
+        color="delivery_status",
+        color_discrete_sequence=px.colors.sequential.Blues_r
+    )
+
+    fig3.update_traces(
+        textposition="outside"
+    )
+
+    fig3.update_layout(
+       title="Delivery Status",
+       template="plotly_white",
+       height=380,
+       plot_bgcolor="white",
+       paper_bgcolor="white",
+       xaxis_title="Total Deliveries",
+       yaxis_title="",
+       showlegend=False,
+       font=dict(size=11),
+       margin=dict(l=10, r=10, t=40, b=30),
+       yaxis=dict(autorange="reversed")
+    )
+
+    st.plotly_chart(
+        fig3,
+        use_container_width=True
+    )
+ #      month orders trend
+
+with col4:
+    monthly_orders_file = DATA_DIR / "monthly_orders.csv"
+
+    if not monthly_orders_file.exists():
+        st.warning("Əvvəl Airflow-da monthly_orders ETL-ni işə sal.")
+        st.stop()
+
+    monthly_orders = pd.read_csv(monthly_orders_file)
+
+
+    st.markdown("<br><br><br>", unsafe_allow_html=True)
+
+    st.subheader("Monthly Orders Trend")
+
+    fig4 = px.line(
+        monthly_orders,
+        x="month",
+        y="total_orders",
+        text="total_orders",
+        markers=True
+    )
+
+    fig4.update_traces(
+        mode="lines+markers+text",
+        textposition="top center",
+        line_shape="linear",
+        line=dict(
+            color="#1565C0",
+            width=3
+        ),
+        marker=dict(
+            size=7,
+            color="#1565C0"
+        ),
+        textfont=dict(
+            size=10,
+            color="#1565C0"
+        )
+    )
+
+    fig4.update_layout(
+       # title="Monthly Orders Trend",
+        template="plotly_white",
+        height=380,
+        showlegend=False,
+        xaxis_title="Month",
+        yaxis_title="Total Orders",
+        hovermode="x unified",
+        font=dict(size=11),
+        margin=dict(l=10, r=10, t=40, b=30)
 )
+    
 
-st.plotly_chart(
-    fig4,
-    use_container_width=True
-)
-
-
+    st.plotly_chart(
+        fig4,
+        use_container_width=True
+    )
 
 # ================= weather impact  =================
 
@@ -308,7 +336,7 @@ fig_weather.add_trace(
 )
 
 fig_weather.update_layout(
-    title="Monthly Weather Impact on Delivery Performance",
+   # title="Monthly Weather Impact on Delivery Performance",
     template="plotly_white",
     height=650,
     hovermode="x unified",
@@ -326,6 +354,10 @@ fig_weather.update_layout(
         xanchor="center"
     )
 )
+
+
+
+
 
 st.plotly_chart(
     fig_weather,
