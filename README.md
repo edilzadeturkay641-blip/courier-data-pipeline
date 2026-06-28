@@ -34,6 +34,30 @@ Streamlit Dashboard
 
 ---
 
+## Dashboard Preview
+
+### Orders by City
+
+![Orders by City](images/city.png)
+
+### Revenue by Company
+
+![Revenue by Company](images/company.png)
+
+### Delivery Status
+
+![Delivery Status](images/deliverey.png)
+
+### Monthly Orders Trend
+
+![Monthly Orders Trend](images/monthly.png)
+
+### Weather Impact Analysis
+
+![Weather Impact](images/weather.png)
+
+---
+
 ## Technologies
 
 * Python
@@ -53,7 +77,4 @@ Streamlit Dashboard
 pip install -r requirements.txt
 docker compose up
 streamlit run app.py
-```
-
-
 
