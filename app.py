@@ -23,7 +23,7 @@ if not orders_by_city_file.exists() or not total_orders_file.exists():
 orders_by_city = pd.read_csv(orders_by_city_file)
 total_orders = pd.read_csv(total_orders_file)["total_orders"][0]
 
-st.title("📦 Courier Company Dashboard")
+st.title("Courier Company Dashboard")
 
 st.metric(
     label="Total Orders",
